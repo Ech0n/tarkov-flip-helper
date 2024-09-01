@@ -114,6 +114,7 @@ const headers = [
 
 function createTraderTable(trader) {
   let table = document.createElement("table");
+  let tableHead = document.createElement("thead");
   let headerRow = document.createElement("tr");
   let col = document.createElement("th");
   col.innerHTML = "";
@@ -126,7 +127,8 @@ function createTraderTable(trader) {
     col.innerHTML = headers[header];
     headerRow.appendChild(col);
   }
-  table.appendChild(headerRow);
+  tableHead.appendChild(headerRow);
+  table.appendChild(tableHead);
   for (let [key, value] of trader.entries()) {
     let row = document.createElement("tr");
 
