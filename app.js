@@ -56,6 +56,8 @@ function processData(data) {
   data["data"]["traders"].forEach((trader) => {
     traders[trader["name"]] = createProfitMap(trader["cashOffers"]);
   });
+  let loadingCircle = document.getElementById("loading-circle");
+  loadingCircle.style.display = "none";
   createTabs(traders);
 }
 
