@@ -91,7 +91,6 @@ function createTraderTab(traderName, trader) {
 function createTraderTable(trader) {
   let table = document.createElement("table");
   for (let [key, value] of trader.entries()) {
-    console.log(key);
     let row = document.createElement("tr");
     let col1 = document.createElement("th");
     let col2 = document.createElement("th");
