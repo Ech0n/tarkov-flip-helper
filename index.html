@@ -64,6 +64,38 @@
           transform: rotate(360deg);
         }
       }
+
+      table {
+        border-collapse: collapse;
+        width: max(65rem, 100%);
+        table-layout: fixed;
+      }
+
+      th {
+        text-align: start;
+
+        border: 1px solid lightgrey;
+        padding: 0.25rem 0.75rem;
+        vertical-align: baseline;
+      }
+
+      th:first-child {
+        position: sticky;
+        inset-inline-start: 0;
+        border-inline-end: none;
+      }
+
+      th {
+        background: white;
+      }
+
+      th {
+        background: whitesmoke;
+      }
+
+      th {
+        vertical-align: bottom;
+      }
     </style>
   </head>
 
