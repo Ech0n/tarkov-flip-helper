@@ -18,6 +18,7 @@ async function querryTraders(levels = { intCntr: 0 }) {
   				item{
             name
             avg24hPrice
+            iconLink
           }
     		}
     }
@@ -41,20 +42,34 @@ function getProfits(item) {
   return singleItemProfit * item["buyLimit"];
 }
 
-function createProfitMap(items) {
+function createItemMap(items) {
   //create map
+
   let itemMap = new Map(
-    items.map((item) => [item["item"]["name"], getProfits(item)])
+    items.map((item) => [
+      item["item"]["name"],
+      {
+        profit: getProfits(item),
+        minTraderLevel: item["minTraderLevel"],
+        priceRUB: item["priceRUB"],
+        buyLimit: item["buyLimit"],
+        fleaPrice: item["item"]["avg24hPrice"],
+        lastOfferCount: item["item"]["lastOfferCount"],
+        img: item["item"]["iconLink"],
+      },
+    ])
   );
   //sort map
-  let sortedMap = new Map([...itemMap.entries()].sort((a, b) => b[1] - a[1]));
+  let sortedMap = new Map(
+    [...itemMap.entries()].sort((a, b) => b[1]["profit"] - a[1]["profit"])
+  );
   return sortedMap;
 }
 
 function processData(data) {
   let traders = {};
   data["data"]["traders"].forEach((trader) => {
-    traders[trader["name"]] = createProfitMap(trader["cashOffers"]);
+    traders[trader["name"]] = createItemMap(trader["cashOffers"]);
   });
   let loadingCircle = document.getElementById("loading-circle");
   loadingCircle.style.display = "none";
@@ -89,17 +104,47 @@ function createTraderTab(traderName, trader) {
   content.appendChild(createTraderTable(trader));
   return content;
 }
+const headers = [
+  "profit",
+  "minTraderLevel",
+  "priceRUB",
+  "buyLimit",
+  "fleaPrice",
+];
 
 function createTraderTable(trader) {
   let table = document.createElement("table");
+  let headerRow = document.createElement("tr");
+  let col = document.createElement("th");
+  col.innerHTML = "";
+  headerRow.appendChild(col);
+  col = document.createElement("th");
+  col.innerHTML = "item name";
+  headerRow.appendChild(col);
+  for (header in headers) {
+    let col = document.createElement("th");
+    col.innerHTML = headers[header];
+    headerRow.appendChild(col);
+  }
+  table.appendChild(headerRow);
   for (let [key, value] of trader.entries()) {
     let row = document.createElement("tr");
-    let col1 = document.createElement("th");
-    let col2 = document.createElement("th");
-    col1.innerHTML += key;
-    col2.innerHTML += value;
-    row.appendChild(col1);
-    row.appendChild(col2);
+
+    let col = document.createElement("th");
+    let img = document.createElement("img");
+    img.src = value["img"];
+    img.setAttribute("lazy", true);
+    col.appendChild(img);
+    row.appendChild(col);
+    col = document.createElement("th");
+    col.innerHTML += key;
+    row.appendChild(col);
+    for (columnName of headers) {
+      col = document.createElement("th");
+      col.innerHTML += String(value[columnName]);
+      row.appendChild(col);
+    }
+
     table.appendChild(row);
   }
 
