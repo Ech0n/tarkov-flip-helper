@@ -17,7 +17,7 @@ async function querryTraders(levels = { intCntr: 0 }) {
     		  buyLimit
   				item{
             name
-            avg24hPrice
+            lastLowPrice
             iconLink
           }
     		}
@@ -38,7 +38,7 @@ function outputObjectToDOM(content) {
 querryTraders();
 
 function getProfits(item) {
-  const singleItemProfit = item["item"]["avg24hPrice"] - item["priceRUB"];
+  const singleItemProfit = item["item"]["lastLowPrice"] - item["priceRUB"];
   return singleItemProfit * item["buyLimit"];
 }
 
@@ -53,7 +53,7 @@ function createItemMap(items) {
         minTraderLevel: item["minTraderLevel"],
         priceRUB: item["priceRUB"],
         buyLimit: item["buyLimit"],
-        fleaPrice: item["item"]["avg24hPrice"],
+        fleaPrice: item["item"]["lastLowPrice"],
         lastOfferCount: item["item"]["lastOfferCount"],
         img: item["item"]["iconLink"],
       },
